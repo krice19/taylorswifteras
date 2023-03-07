@@ -1,4 +1,7 @@
 config.py
+python_exploration/config.py
+.env
+non_flask_jp_test.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
