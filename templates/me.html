@@ -3,31 +3,51 @@
 {% block content %}
 
 <!-- Response Data -->
-<div id="profile" class="media">
-  {% if data.images %}
-  <div class="mr-4">
-    <img class="media-object" width="150" src="{{ data.images.0.url }}"/>
-  </div>
-  {% endif %}
   <div class="media-body">
-    <h1>Logged in as <i>{{ data.display_name }}</i></h1>
+    <h1 style="color:blue;">Your Taylor Swift Era is...</h1>
     <dl class="dl-horizontal">
-      <dt>Id</dt><dd>{{ data.id }}</dd>
-      <dt>Email</dt><dd>{{ data.email }}</dd>
-      <dt>Country</dt><dd>{{ data.country }}</dd>
-      <dt>Followers</dt><dd>{{ data.followers.total }}</dd>
-      <dt>Account Type</dt><dd>{{ data.product }}</dd>
-      <dt>Spotify Url</dt><dd><a href="{{ data.external_urls.spotify }}">{{ data.external_urls.spotify }}</a></dd>
-      <dt>URI</dt><dd><a href="{{ data.uri }}">{{ data.uri }}</a></dd>
+      <dd>{{ result }}</dd>
     </dl>
   </div>
 </div>
 
-  <h2>Token Information</h2>
-  <dl class="dl-horizontal" id="tokens">
-    <dt>Access token</dt><dd class="text-truncate">{{ tokens.access_token }}</dd>
-    <dt>Refresh token</dt><dd class="text-truncate">{{ tokens.refresh_token }}</dd>
-  </dl>
+<div>
+{% if result == "Taylor Swift Debut" %}
+<iframe src="https://giphy.com/embed/3ohzUo9tgR6SVo3E2s" width="480" height="355" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/3ohzUo9tgR6SVo3E2s">via GIPHY</a></p>
+
+{% elif result == "Fearless" %}
+<iframe src="https://giphy.com/embed/3o6gfPNJ4FHe8EIarK" width="480" height="268" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/3o6gfPNJ4FHe8EIarK">via GIPHY</a></p>
+
+{% elif result == "Speak Now" %}
+<iframe src="https://giphy.com/embed/bgDd8eRNi6NK8" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/taylor-swift-bgDd8eRNi6NK8">via GIPHY</a></p>
+
+{% elif result == "Red" %}
+<iframe src="https://giphy.com/embed/EGT8bELJcw1PTFCwqP" width="480" height="180" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/taylorswift-taylor-swift-taylors-version-i-bet-you-think-about-me-EGT8bELJcw1PTFCwqP">via GIPHY</a></p>
+
+{% elif result == "1989" %}
+<iframe src="https://giphy.com/embed/WMINluEOFkvAs" width="480" height="358" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/taylor-swift-gif-gifs-gifhunt-WMINluEOFkvAs">via GIPHY</a></p>
+
+{% elif result == "Reputation" %}
+<iframe src="https://giphy.com/embed/3ohc18TrhIm9JDu8jC" width="480" height="225" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/taylorswift-taylor-swift-end-game-3ohc18TrhIm9JDu8jC">via GIPHY</a></p>
+
+{% elif result == "Lover" %}
+<iframe src="https://giphy.com/embed/XCm2qZBqbtw3IEoETJ" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/taylorswift-taylor-swift-lover-music-video-XCm2qZBqbtw3IEoETJ">via GIPHY</a></p>
+
+{% elif result == "Folklore" %}
+<iframe src="https://giphy.com/embed/zIeW9pH03t6z2butT3" width="480" height="289" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/nowthatsmusic-taylor-swift-cardigan-now-76-zIeW9pH03t6z2butT3">via GIPHY</a></p>
+
+{% elif result == "Evermore" %}
+<iframe src="https://giphy.com/embed/oO8JtuxP3KPvDvysdi" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/taylorswift-taylor-swift-willow-evermore-oO8JtuxP3KPvDvysdi">via GIPHY</a></p>
+
+{% elif result == "Midnights" %}
+<iframe src="https://giphy.com/embed/8nyug9FhGXHhClCfDC" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/taylorswift-taylor-swift-taylorswift13-midnights-8nyug9FhGXHhClCfDC">via GIPHY</a></p>
+
+{% else %}
+<h3>You need to listen to more Taylor Swift</h3>
+
+{% endif %}
+</div>
+
 {% endblock %}
 
 {% block footer %}

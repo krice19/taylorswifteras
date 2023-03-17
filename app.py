@@ -270,7 +270,7 @@ def me():
     ev_mean = 10.558981043212121
     md_mean = 10.680990369545453
 
-    df_data = {'Albums': ["Taylor Swift",
+    df_data = {'Albums': ["Taylor Swift Debut",
                         "Fearless",
                         "Speak Now", 
                         "Red",
@@ -301,11 +301,9 @@ def me():
 
     smallest = df.nsmallest(1, 'Minimum')
     name = smallest['Albums'].to_string(index=False)
-    result = "You are " + name + " era!"
+    #result = "You are " + name + " era!"
 
-    return result
-
-#render_template('test.html', data=data, tokens=session.get('tokens'))
+    return render_template('me.html', result=name, tokens=session.get('tokens'))
 
 
 
