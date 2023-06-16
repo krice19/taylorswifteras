@@ -18,7 +18,7 @@ More info:
 
 '''
 
-from config import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
+from config import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, SECRET_KEY
 
 from flask import (
     abort,
@@ -46,30 +46,31 @@ logging.basicConfig(
 )
 
 
-
-
 # Client info
 CLIENT_ID = CLIENT_ID
 CLIENT_SECRET = CLIENT_SECRET
 REDIRECT_URI = REDIRECT_URI
+SECRET_KEY = SECRET_KEY
 
 
 # Spotify API endpoints
 AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
-ME_URL = 'https://api.spotify.com/v1/me/top/tracks?limit=15&time_range=long_term'
+ME_URL = 'https://api.spotify.com/v1/me/top/tracks?limit=15&time_range=short_term'
 AUDIO_URL = 'https://api.spotify.com/v1/audio-features?ids='
 
 
 # Start 'er up
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY')
+app.secret_key = SECRET_KEY
+
+
 
 
 @app.route('/')
 def index():
 
-    return render_template('index.html')
+    return render_template('index2.html')
 
 
 @app.route('/<loginout>')
@@ -113,6 +114,8 @@ def login(loginout):
     res = make_response(redirect(f'{AUTH_URL}/?{urlencode(payload)}'))
     res.set_cookie('spotify_auth_state', state)
 
+   
+
     return res
 
 
@@ -140,7 +143,14 @@ def callback():
     # header with value:
     # b'Basic ' + b64encode((CLIENT_ID + ':' + SECRET).encode())
     res = requests.post(TOKEN_URL, auth=(CLIENT_ID, CLIENT_SECRET), data=payload)
+
+    
+    # convert the response to JSON
     res_data = res.json()
+
+    # save the access token
+    #access_token = res_data.get('access_token')
+    #res_data = res.json()
 
     if res_data.get('error') or res.status_code != 200:
         app.logger.error(
@@ -191,7 +201,14 @@ def me():
     # Get profile info
     headers = {'Authorization': f"Bearer {session['tokens'].get('access_token')}"}
 
+    #headers = {'Authorization': 'Bearer {token}'.format(token=access_token)
+               
+
+
     res = requests.get(ME_URL, headers=headers)
+    app.logger.info(f"Status Code {res.status_code}")
+    app.logger.info(f"Status Code {res.headers}")
+    app.logger.info(f"Status Code {res.text}")
     top_tracks = res.json()
     
 
@@ -302,6 +319,7 @@ def me():
     smallest = df.nsmallest(1, 'Minimum')
     name = smallest['Albums'].to_string(index=False)
     #result = "You are " + name + " era!"
+
 
     return render_template('me.html', result=name, tokens=session.get('tokens'))
 
