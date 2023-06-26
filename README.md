@@ -6,6 +6,7 @@ Using Spotify's APIs to: <br />
 - Compare the user's average to each Taylor Ablum average I generated in my preliminary analysis  
 - The album average the user is closest to is their Taylor Era!
 <br />
+
 ### Next Steps
 
 Next steps will include: <br /> 
@@ -16,7 +17,7 @@ Next steps will include: <br />
 <br />
 
 ### HTML Preview
-<br /> 
+
 **Home page that appears when you first enter the app**
 <br /> 
 
@@ -27,5 +28,6 @@ Next steps will include: <br />
 **Results page that appears after you log into your Spotify account**
 
 <br /> 
+
 ![resultspage](/Images/resultspage_taylor.png)
 
