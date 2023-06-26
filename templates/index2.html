@@ -8,17 +8,53 @@
    <link
      rel="stylesheet"
      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-   />
+    />
+    <link rel="stylesheet" href="static/style.css" />
+
    <style> 
     body {
       background-image: url("https://www.gannett-cdn.com/indepth-static-assets/uploads/master/11510779002/910b9cf6-bcea-4fd0-9ba1-fc10cff1fb04-taylor-swift-eras-topper-2.png?width=2400");
       background-color: #cccccc;
     }
+    .vertical-center {
+    text-align: center;
+    display: inline-block;
+    border-style: solid;
+    border-radius: 10px;
+    transition: all .1s linear;
+    line-height: 1.25;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    width: 150px;
+                    }
+    .h1 {
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+
+                    
     </style>
 </head>
+
+
 <body>  
-    <h1>What Taylor Swift Era Are You?</h1>
-      <p><a class="btn btn-primary btn-lg" href="/login"
+
+    <div class="wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6"> 
+                    <h1 style="color:white"> What Taylor Swift Era Are You?</h1>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="vertical-center"> 
+                <p><a class="btn btn-primary btn-lg" href="/login"
                   role="button">Login</a></p>
+            </div> 
+        </div>
+               
+    </div>
+
 </body>
 </html>
