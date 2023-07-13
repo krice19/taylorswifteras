@@ -56,7 +56,7 @@ SECRET_KEY = SECRET_KEY
 # Spotify API endpoints
 AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
-ME_URL = 'https://api.spotify.com/v1/me/top/tracks?limit=15&time_range=short_term'
+ME_URL = 'https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=long_term'
 AUDIO_URL = 'https://api.spotify.com/v1/audio-features?ids='
 
 
@@ -219,31 +219,42 @@ def me():
         )
         abort(res.status_code)
 
-    top_songs =[]
-    for idx, item in enumerate(top_tracks['items']):
-         top_songs.append(item['id'])
 
-    song_count = len(top_songs)
+    '''
+    #top_songs =[]
+    #for idx, item in enumerate(top_tracks['items']):
+         #top_songs.append(item['id'])
 
-    id_string = ','.join(top_songs)
+    #song_count = len(top_songs)
 
-    url = AUDIO_URL+id_string
+    #top_songs_names = []
+    #for idx, item in enumerate(top_tracks['items']):
+        #top_songs_names.append(item['name'])
 
-    response = requests.get(url, headers=headers)
-    audio_features = response.json()
+    #top_songs_string = ', '.join(top_songs_names)
 
-    dance = []
-    energy = []
-    key = []
-    loud = []
-    mode = []
-    speech = []
-    acoustic = []
-    instrument = []
-    liveness = []
-    valence = []
-    tempo = []
+    #id_string = ','.join(top_songs)
 
+    #url = AUDIO_URL+id_string
+
+    #response = requests.get(url, headers=headers)
+    #audio_features = response.json()
+
+    #dance = []
+    #energy = []
+    #key = []
+    #loud = []
+    #mode = []
+    #speech = []
+    #acoustic = []
+    #instrument = []
+    #liveness = []
+    #valence = []
+    #tempo = []
+    '''
+
+
+    """
     for idx, item in enumerate(audio_features['audio_features']):
         dance.append(item["danceability"])
         energy.append(item["energy"])
@@ -318,10 +329,39 @@ def me():
 
     smallest = df.nsmallest(1, 'Minimum')
     name = smallest['Albums'].to_string(index=False)
-    #result = "You are " + name + " era!"
+    result = "You are " + name + " era! Your top songs are:" + top_songs_string
+    """
+
+    output_dict = [x for x in top_tracks["items"] if x['artists'][0]['name'] == 'Taylor Swift' and x['album']['album_type'] == 'ALBUM']
+
+    result = output_dict[0]["album"]['name']
+
+    song_name = output_dict[0]['name']
 
 
-    return render_template('me.html', result=name, tokens=session.get('tokens'))
+    if result == 'Midnights (The Til Dawn Edition)' or result == 'Midnights (3am Edition)' or result =='Midnights':
+        era_name = "Midnights"
+    elif result == "Red (Taylor's Version)" or result == 'Red' or result == "Red (Deluxe Edition)":
+        era_name = "Red"
+    elif result == "Fearless (Taylor's Version)" or result == 'Fearless' or result == "Fearless Platinum Edition":
+        era_name = "Fearless"
+    elif result == "evermore (deluxe version)" or result == 'evermore':
+        era_name = "evermore"
+    elif result == "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]" or result == 'folklore (deluxe version)' or result == "folklore":
+        era_name = "folklore"
+    elif result == "Lover":
+        era_name = "Lover"
+    elif result == "reputation" or result == 'reputation Stadium Tour Surprise Song Playlist':
+        era_name = "reputation"
+    elif result == "1989 (Taylor's Version)" or result == '1989' or result == "1989 (Deluxe Edition)":
+        era_name = "1989"
+    elif result == "Speak Now (Taylor's Version)" or result == "Speak Now" or result == "Speak Now (Deluxe Edition)" or result == "Speak Now World Tour Live":
+        era_name = "Speak Now"
+    elif result == "Taylor Swift" or result == 'Live From Clear Channel Stripped 2008':
+        era_name = "Taylor Swift Debut"
+    else:
+        era_name = "UH OH, you need to listen to more Taylor Swift"
 
 
+    return render_template('me.html', result=era_name, tokens=session.get('tokens'))
 

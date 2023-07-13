@@ -1,10 +1,9 @@
 # What Taylor Swift Era are You?
 
 Using Spotify's APIs to: <br />
-- Read user's top 5 songs from the past 4 weeks
-- Generate an average based on the numberical values of the audio features of each song
-- Compare the user's average to each Taylor Ablum average I generated in my preliminary analysis  
-- The album average the user is closest to is their Taylor Era!
+- Read user's top 50 long term played songs
+- Filtere's JSON to find top song from Taylor Swift
+- The album the user's top song in in is their Taylor Era!
 <br />
 
 ### Next Steps
@@ -29,5 +28,5 @@ Next steps will include: <br />
 
 <br /> 
 
-![resultspage](/Images/resultspage_taylor.png)
+![resultspage](/Images/results2.png)
 
