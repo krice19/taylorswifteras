@@ -10,7 +10,6 @@ Using Spotify's APIs to: <br />
 
 Next steps will include: <br /> 
 - Styling the html
-- Editing the results page to display the user's top 5 songs 
 - Remote hosting 
 - Mobile use & linking on social media
 <br />
