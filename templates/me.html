@@ -12,40 +12,93 @@
 </div> 
 <div> -->
 {% if result == "Taylor Swift Debut" %}
-<img src="images/rep.jpeg" alt="rep" width="2000" height="2000">
-
+<img
+  src="{{ url_for('static', filename='debut.png') }}"
+  class="image"
+  alt="debut" 
+  width="1000" 
+  height="700"
+/>
 {% elif result == "Fearless" %}
-<img src="images/rep.jpeg" alt="rep" width="500" height="600">
+<img
+  src="{{ url_for('static', filename='fearless.png') }}"
+  class="image"
+  alt="fearless" 
+  width="1000" 
+  height="700"
+/>
 
 {% elif result == "Speak Now" %}
-<img src="images/rep.jpeg" alt="rep" width="500" height="600">
+<img
+  src="{{ url_for('static', filename='speaknow.png') }}"
+  class="image"
+  alt="speaknow" 
+  width="1000" 
+  height="700"
+/>
 
 {% elif result == "Red" %}
-<img src="images/rep.jpeg" alt="rep" width="500" height="600">
+<img
+  src="{{ url_for('static', filename='red.png') }}"
+  class="image"
+  alt="red" 
+  width="1000" 
+  height="700"
+/>
 
 {% elif result == "1989" %}
-<img src="images/rep.jpeg" alt="rep" width="500" height="600">
+<img
+  src="{{ url_for('static', filename='1989.png') }}"
+  class="image"
+  alt="1989" 
+  width="1000" 
+  height="700"
+/>
 
 {% elif result == "reputation" %}
 <img
-  src="{{ url_for('static', filename='rep.jpeg') }}"
+  src="{{ url_for('static', filename='rep.png') }}"
   class="image"
-  alt="rep" 
+  alt="reputation" 
   width="1000" 
   height="700"
 />
 
 {% elif result == "Lover" %}
-<img src="images/rep.jpeg" alt="rep" width="500" height="600">
+<img
+  src="{{ url_for('static', filename='lover.png') }}"
+  class="image"
+  alt="lover" 
+  width="1000" 
+  height="700"
+/>
 
 {% elif result == "Folklore" %}
-<img src="images/rep.jpeg" alt="rep" width="500" height="600">
+<img
+  src="{{ url_for('static', filename='folk.png') }}"
+  class="image"
+  alt="folklore" 
+  width="1000" 
+  height="700"
+/>
 
 {% elif result == "Evermore" %}
-<img src="images/rep.jpeg" alt="rep" width="500" height="600">
+<img
+  src="{{ url_for('static', filename='ever.png') }}"
+  class="image"
+  alt="evermore" 
+  width="1000" 
+  height="700"
+/>
 
 {% elif result == "Midnights" %}
-<img src="images/rep.jpeg" alt="rep" width="500" height="600">
+<img
+  src="{{ url_for('static', filename='mid.png') }}"
+  class="image"
+  alt="midnights" 
+  width="1000" 
+  height="700"
+/>
 
 {% else %}
 <h3>You need to listen to more Taylor Swift</h3>

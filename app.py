@@ -338,6 +338,8 @@ def me():
 
     song_name = output_dict[0]['name']
 
+    
+
 
     if result == 'Midnights (The Til Dawn Edition)' or result == 'Midnights (3am Edition)' or result =='Midnights':
         era_name = "Midnights"
@@ -362,6 +364,7 @@ def me():
     else:
         era_name = "UH OH, you need to listen to more Taylor Swift"
 
+    
 
     return render_template('me.html', result=era_name, tokens=session.get('tokens'))
 
