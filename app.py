@@ -38,6 +38,11 @@ import secrets
 import string
 from urllib.parse import urlencode
 import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+classifier = LogisticRegression(solver='lbfgs', random_state=1)
+label_encoder = LabelEncoder()
 
 
 
@@ -58,6 +63,7 @@ AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 ME_URL = 'https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=long_term'
 AUDIO_URL = 'https://api.spotify.com/v1/audio-features?ids='
+ME2_URL = 'https://api.spotify.com/v1/me/top/tracks?limit=5&time_range=long_term'
 
 
 # Start 'er up
@@ -205,73 +211,94 @@ def me():
                
 
 
-    res = requests.get(ME_URL, headers=headers)
-    app.logger.info(f"Status Code {res.status_code}")
-    app.logger.info(f"Status Code {res.headers}")
-    app.logger.info(f"Status Code {res.text}")
-    top_tracks = res.json()
+    try:
+        
+        res = requests.get(ME_URL, headers=headers)
+        app.logger.info(f"Status Code {res.status_code}")
+        app.logger.info(f"Status Code {res.headers}")
+        app.logger.info(f"Status Code {res.text}")
+        top_tracks = res.json()
     
 
-    if res.status_code != 200:
-        app.logger.error(
-            'Failed to get profile info: %s',
-            top_tracks.get('error', 'No error message returned.'),
-        )
-        abort(res.status_code)
+        if res.status_code != 200:
+            app.logger.error(
+                'Failed to get profile info: %s',
+                top_tracks.get('error', 'No error message returned.'),
+            )
+            abort(res.status_code)
+        
+        output_dict = [x for x in top_tracks["items"] if x['artists'][0]['name'] == 'Taylor Swift' and x['album']['album_type'] == 'ALBUM']
+
+        result = output_dict[0]["album"]['name']
+
+        song_name = output_dict[0]['name']
+        
+
+    
+    except:
+      
+        res = requests.get(ME2_URL, headers=headers)
+
+        app.logger.info(f"Status Code {res.status_code}")
+        app.logger.info(f"Status Code {res.headers}")
+        app.logger.info(f"Status Code {res.text}")
+        
+        top_tracks = res.json()
 
 
-    '''
-    #top_songs =[]
-    #for idx, item in enumerate(top_tracks['items']):
-         #top_songs.append(item['id'])
-
-    #song_count = len(top_songs)
-
-    #top_songs_names = []
-    #for idx, item in enumerate(top_tracks['items']):
-        #top_songs_names.append(item['name'])
-
-    #top_songs_string = ', '.join(top_songs_names)
-
-    #id_string = ','.join(top_songs)
-
-    #url = AUDIO_URL+id_string
-
-    #response = requests.get(url, headers=headers)
-    #audio_features = response.json()
-
-    #dance = []
-    #energy = []
-    #key = []
-    #loud = []
-    #mode = []
-    #speech = []
-    #acoustic = []
-    #instrument = []
-    #liveness = []
-    #valence = []
-    #tempo = []
-    '''
+        df = pd.read_csv("all_taylor_features.csv")
+        df = df.drop('Unnamed: 0',axis=1)
+        df["album_outcome"] = label_encoder.fit_transform(df["album"])
+    
+        y = df["album_outcome"]
+        x = df.drop(columns=["album","album_outcome"])
+    
+        classifier.fit(x, y)
 
 
-    """
-    for idx, item in enumerate(audio_features['audio_features']):
-        dance.append(item["danceability"])
-        energy.append(item["energy"])
-        key.append(item["key"])
-        loud.append(item["loudness"])
-        mode.append(item["mode"])
-        speech.append(item["speechiness"])
-        acoustic.append(item["acousticness"])
-        instrument.append(item["instrumentalness"])
-        liveness.append(item["liveness"])
-        valence.append(item["valence"])
-        tempo.append(item["tempo"])
+        top_songs =[]
+        for idx, item in enumerate(top_tracks['items']):
+            top_songs.append(item['id'])
+    
+        song_count = len(top_songs)
 
-    song_dict = dict(danceability=dance, 
+        id_string = ','.join(top_songs)
+
+        url = AUDIO_URL+id_string
+
+        res2 = requests.get(url, headers=headers)
+        audio_features = res2.json()
+
+
+        dance = []
+        energy = []
+        key = []
+        loud = []
+        mode = []
+        speech = []
+        acoustic = []
+        instrument = []
+        liveness = []
+        valence = []
+        tempo = []
+
+        for idx, item in enumerate(audio_features['audio_features']):
+            dance.append(item["danceability"])
+            energy.append(item["energy"])
+            key.append(item["key"])
+            loud.append(item["loudness"])
+            mode.append(item["mode"])
+            speech.append(item["speechiness"])
+            acoustic.append(item["acousticness"])
+            instrument.append(item["instrumentalness"])
+            liveness.append(item["liveness"])
+            valence.append(item["valence"])
+            tempo.append(item["tempo"])
+                
+        song_dict = dict(danceability=dance, 
                     energy =energy,
                     key =key,
-                    loudness=loud,  
+                    loudness=loud,
                     mode=mode,
                     speechiness=speech,
                     acousticness=acoustic,
@@ -279,67 +306,18 @@ def me():
                     liveness=liveness,
                     valence=valence,
                     tempo=tempo)
-
-    song_df = pd.DataFrame(song_dict)
-
-    top_songs_means = song_df[["danceability","energy","key","loudness",
-        "mode","speechiness","acousticness",
-        "instrumentalness","liveness","valence","tempo"]].mean()
-    top_mean = top_songs_means.mean()
-
-    ts_mean = 11.800125012121212
-    fr_mean = 12.051548975419582
-    sp_mean = 12.964633383051945
-    rd_mean = 11.325443456060606
-    e9_mean = 11.426378996083917
-    rp_mean = 11.37416730771717
-    lv_mean = 10.85594381328283
-    fk_mean = 10.274035654943182
-    ev_mean = 10.558981043212121
-    md_mean = 10.680990369545453
-
-    df_data = {'Albums': ["Taylor Swift Debut",
-                        "Fearless",
-                        "Speak Now", 
-                        "Red",
-                        "1989", 
-                        "Reputation",
-                        "Lover",
-                        "Folklore",
-                        "Evermore", 
-                        "Midnights"],
-            'Means': [ts_mean, 
-                        fr_mean,
-                        sp_mean,
-                        rd_mean,
-                        e9_mean,
-                        rp_mean,
-                        lv_mean,
-                        fk_mean,
-                        ev_mean,
-                        md_mean]}
-
-    df = pd.DataFrame(data=df_data)
-
-    df["My Top Mean"] = top_mean
-
-    df["Difference"] = df["Means"] - df["My Top Mean"]
-
-    df["Minimum"] = df["Difference"].abs()
-
-    smallest = df.nsmallest(1, 'Minimum')
-    name = smallest['Albums'].to_string(index=False)
-    result = "You are " + name + " era! Your top songs are:" + top_songs_string
-    """
-
-    output_dict = [x for x in top_tracks["items"] if x['artists'][0]['name'] == 'Taylor Swift' and x['album']['album_type'] == 'ALBUM']
-
-    result = output_dict[0]["album"]['name']
-
-    song_name = output_dict[0]['name']
-
+        
+        song_df = pd.DataFrame(song_dict)
+    
+        x_test = song_df
+        y_pred = classifier.predict(x_test)
+        album_pred = label_encoder.inverse_transform(y_pred)
+        
+        result = album_pred[0]
     
 
+
+    
 
     if result == 'Midnights (The Til Dawn Edition)' or result == 'Midnights (3am Edition)' or result =='Midnights':
         era_name = "Midnights"
@@ -365,6 +343,5 @@ def me():
         era_name = "UH OH, you need to listen to more Taylor Swift"
 
     
-
     return render_template('me.html', result=era_name, tokens=session.get('tokens'))
 
