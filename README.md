@@ -7,6 +7,11 @@ Using Spotify's APIs to: <br />
 - If the user does not have a Taylor Swift song in their top 50, they will get their era from a multi linear regression model that predicts their era, based on the audio features of Taylor's songs and the audio features of the users top 5 medium term played songs
 <br />
 
+App is deployed at:  <br />
+<br />
+**yourtaylorera-kellybrice19.pythonanywhere.com**
+
+
 ### Next Steps
 
 Right now, the app is in development mode and will only run for users registered in the Development Dashboard.  Next steps include requesting a quota extension to open the app up to the public.  
