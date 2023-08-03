@@ -1,150 +1,191 @@
 {% extends "base.html" %}
 {% block title %}What Taylor Era are you?{% endblock %}
 {% block content %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 
 <!-- Response Data -->
 <div class="media-body">
-    <!-- <h1 style="color:blue;">Your Taylor Swift Era is...</h1>
-    <dl class="dl-horizontal">
-      <dd>{{ result }}</dd>
-    </dl>
-  </div>
-</div> 
-<div> -->
 
-{% if result == "Taylor Swift Debut" %}
-<img
-  src="{{ url_for('static', filename='debut.png') }}"
-  class="image"
-  alt="debut" 
-  width="1000" 
-  height="700"
-/>
-{% elif result == "Fearless" %}
-<img
-  src="{{ url_for('static', filename='fearless.png') }}"
-  class="image"
-  alt="fearless" 
-  width="1000" 
-  height="700"
-/>
+  {% if result == "Taylor Swift Debut" %}
+    <img
+      src="{{ url_for('static', filename='debut.png') }}"
+      class="responsive"
+      alt="debut" 
+    />
+  
+  {% elif result == "Fearless" %}
+    <img
+      src="{{ url_for('static', filename='fearless.png') }}"
+      class="responsive"
+      alt="fearless" 
+    />
 
-{% elif result == "Speak Now" %}
-<img
-  src="{{ url_for('static', filename='speaknow.png') }}"
-  class="image"
-  alt="speaknow" 
-  width="1000" 
-  height="700"
-/>
+  {% elif result == "Speak Now" %}
+    <img
+      src="{{ url_for('static', filename='speaknow.png') }}"
+      class="responsive"
+      alt="speaknow" 
+    />
 
-{% elif result == "Red" %}
-<img
-  src="{{ url_for('static', filename='red.png') }}"
-  class="image"
-  alt="red" 
-  width="1000" 
-  height="700"
-/>
+  {% elif result == "Red" %}
+    <img
+      src="{{ url_for('static', filename='red.png') }}"
+      class="responsive"
+      alt="red" 
+    />
 
-{% elif result == "1989" %}
-<img
-  src="{{ url_for('static', filename='1989.png') }}"
-  class="image"
-  alt="1989" 
-  width="1000" 
-  height="700"
-/>
+  {% elif result == "1989" %}
+    <img
+      src="{{ url_for('static', filename='1989.png') }}"
+      class="responsive"
+      alt="1989" 
+    />
 
-{% elif result == "reputation" %}
-<img
-  src="{{ url_for('static', filename='rep.png') }}"
-  class="image"
-  alt="reputation" 
-  width="1000" 
-  height="700"
-/>
+  {% elif result == "reputation" %}
+    <img
+      src="{{ url_for('static', filename='rep.png') }}"
+      class="responsive"
+      alt="reputation" 
+    />
 
-{% elif result == "Lover" %}
-<img
-  src="{{ url_for('static', filename='lover.png') }}"
-  class="image"
-  alt="lover" 
-  width="1000" 
-  height="700"
-/>
+  {% elif result == "Lover" %}
+    <img
+      src="{{ url_for('static', filename='lover.png') }}"
+      class="responsive"
+      alt="lover" 
+    />
 
-{% elif result == "Folklore" %}
-<img
-  src="{{ url_for('static', filename='folk.png') }}"
-  class="image"
-  alt="folklore" 
-  width="1000" 
-  height="700"
-/>
+  {% elif result == "folklore" %}
+    <img
+      src="{{ url_for('static', filename='folk.png') }}"
+      class="responsive"
+      alt="folklore" 
+    />
 
-{% elif result == "Evermore" %}
-<img
-  src="{{ url_for('static', filename='ever.png') }}"
-  class="image"
-  alt="evermore" 
-  width="1000" 
-  height="700"
-/>
+  {% elif result == "evermore" %}
+    <img
+      src="{{ url_for('static', filename='ever.png') }}"
+      class="responsive"
+      alt="evermore" 
+    />
 
-{% elif result == "Midnights" %}
-<img
-  src="{{ url_for('static', filename='mid.png') }}"
-  class="image"
-  alt="midnights" 
-  width="1000" 
-  height="700"
-/>
+  {% elif result == "Midnights" %}
+    <img
+      src="{{ url_for('static', filename='mid.png') }}"
+      class="responsive"
+      alt="midnights" 
+    />
 
-{% else %}
-<h3>You need to listen to more Taylor Swift</h3>
+  {% else %}
+    <h3>You need to listen to more Taylor Swift</h3>
 
-{% endif %}
+  {% endif %}
 </div>
 
 {% endblock %}
 
 {% block footer %}
 
-<button type="button" class="btn btn-success btn-xs" onclick="refreshTokens()">Refresh Token</button>
-<a href="/logout" class="btn btn-danger btn-xs">Logout</a>
+
+<div>
+  <p><a class="btn btn-outline-danger" href="/logout"
+    role="button">Logout</a></p>
+</div>
 
 
-<!-- Token info template -->
-{% raw %}
-<script id="token-template" type="text/x-handlebars-template">
-  <dt>Access token</dt><dd class="text-truncate">{{access_token}}</dd>
-  <dt>Refresh token</dt><dd class="text-truncate">{{refresh_token}}</dd>
-</script>
-{% endraw %}
+<div>
+{% if result == "Taylor Swift Debut" %}
+  <p><a class="btn btn-outline-info" href="{{ url_for('static', filename='debut.png') }}" download="YourSpotifyEra"
+  role="button"> Download Your Spotify Era</a></p>
+  <p><a class="btn btn-outline-success" href="https://open.spotify.com/album/7mzrIsaAjnXihW3InKjlC3?si=pIj0JxT7RrycpQYbUAWZrA" download="YourSpotifyEra"
+    role="button"> Listen to Taylor Swift on Spotify </a></p>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.js"></script>
-<script>
-  (function() {
+{% elif result == "Fearless" %}
+  <p><a class="btn btn-outline-info" href="{{ url_for('static', filename='fearless.png') }}" download="YourSpotifyEra"
+  role="button"> Download Your Spotify Era</a></p>
+  <p><a class="btn btn-outline-success" href="https://open.spotify.com/album/4hDok0OAJd57SGIT8xuWJH?si=rHFvZlphSkuKjXW0PGd7Gg" download="YourSpotifyEra"
+    role="button"> Listen to Fearless (Taylor's Version) on Spotify </a></p>
 
-    // Token template
-    var tokenSource = document.getElementById('token-template').innerHTML,
-        tokenTemplate = Handlebars.compile(tokenSource),
-        tokenPlaceholder = document.getElementById('tokens');
+{% elif result == "Speak Now" %}  
+  <p><a class="btn btn-outline-info" href="{{ url_for('static', filename='speaknow.png') }}" download="YourSpotifyEra"
+  role="button"> Download Your Spotify Era</a></p>
+  <p><a class="btn btn-outline-info" href="https://open.spotify.com/album/5AEDGbliTTfjOB8TSm1sxt?si=9gYujTBSQdOoT2F_1GAaKg" download="YourSpotifyEra"
+    role="button"> Listen to Speak Now (Taylor's Version) on Spotify </a></p>
 
-    function refreshTokens() {
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          let res_json = JSON.parse(this.responseText);
-          tokenPlaceholder.innerHTML = tokenTemplate(res_json);
-        }
-      };
-      xhttp.open("GET", "{{ url_for('refresh') }}", true);
-      xhttp.send();
-    }
+{% elif result == "Red" %}
+  <p><a class="btn btn-outline-info" href="{{ url_for('static', filename='red.png') }}" download="YourSpotifyEra"
+  role="button"> Download Your Spotify Era</a></p>
+  <p><a class="btn btn-outline-success" href="https://open.spotify.com/album/6x9s2ObPdpATZgrwxsk9c0?si=RzbaE5bmRmO6Aier7xAJwg" download="YourSpotifyEra"
+    role="button"> Listen to Red (Taylor's Version) on Spotify </a></p>
 
-    window.refreshTokens = refreshTokens;
-  })();
-</script>
+{% elif result == "1989" %}
+  <p><a class="btn btn-outline-info" href="{{ url_for('static', filename='1989.png') }}" download="YourSpotifyEra"
+  role="button"> Download Your Spotify Era</a></p>
+  <p><a class="btn btn-outline-success" href="https://open.spotify.com/album/34OkZVpuzBa9y40DCy0LPR?si=qHc36nQmSUix1E9GHIsANw" download="YourSpotifyEra"
+    role="button"> Listen to 1989 on Spotify </a></p>
+
+{% elif result == "reputation" %}
+  <p><a class="btn btn-outline-info" href="{{ url_for('static', filename='rep.png') }}" download="YourSpotifyEra"
+  role="button"> Download Your Spotify Era</a></p>
+  <p><a class="btn btn-outline-success" href="https://open.spotify.com/album/6DEjYFkNZh67HP7R9PSZvv?si=w1D2GMkGTfGU0QSa13ysSw" download="YourSpotifyEra"
+    role="button"> Listen to reputation on Spotify </a></p>
+
+{% elif result == "Lover" %}
+  <p><a class="btn btn-outline-info" href="{{ url_for('static', filename='lover.png') }}" download="YourSpotifyEra"
+  role="button"> Download Your Spotify Era</a></p>
+  <p><a class="btn btn-outline-success" href="https://open.spotify.com/album/1NAmidJlEaVgA3MpcPFYGq?si=nsirsjCDSEqq_TzEwwhQQw" download="YourSpotifyEra"
+    role="button"> Listen to Lover on Spotify </a></p>
+
+{% elif result == "folklore" %}
+  <p><a class="btn btn-outline-info" href="{{ url_for('static', filename='folk.png') }}" download="YourSpotifyEra"
+  role="button"> Download Your Spotify Era</a></p>
+  <p><a class="btn btn-outline-success" href="https://open.spotify.com/album/1pzvBxYgT6OVwJLtHkrdQK?si=8phFxACvRYaD195_T8_r1Q" download="YourSpotifyEra"
+    role="button"> Listen to folklore on Spotify </a></p>
+
+{% elif result == "evermore" %}
+  <p><a class="btn btn-outline-info" href="{{ url_for('static', filename='ever.png') }}" download="YourSpotifyEra"
+  role="button"> Download Your Spotify Era</a></p>
+  <p><a class="btn btn-outline-success" href="https://open.spotify.com/album/6AORtDjduMM3bupSWzbTSG?si=8LfrFF44RA2aDFe1IAGGrA" download="YourSpotifyEra"
+    role="button"> Listen to evermore on Spotify </a></p>
+
+{% elif result == "Midnights" %}
+  <p><a class="btn btn-outline-info" href="{{ url_for('static', filename='mid.png') }}" download="YourSpotifyEra"
+  role="button"> Download Your Spotify Era</a></p>
+  <p><a class="btn btn-outline-success" href="https://open.spotify.com/album/3lS1y25WAhcqJDATJK70Mq?si=f1HntiOuS3uT5ZoOeRkNSQ" download="YourSpotifyEra"
+    role="button"> Listen to Midnights on Spotify </a></p>
+
+{% else %}
+
+{% endif %}
+</div>
+
+<div>
+  <h3 class="hsocial">Thank you and don't forget to share!</h3>
+  <a href="https://www.facebook.com" class="fab fa-facebook"></a>
+  <a href="https://instagram.com" class="fab fa-instagram"></a>
+  <a href="https://snapchat.com" class="fab fa-snapchat-ghost"></a>
+</div>
+
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+<!-- FOOTER -->
+<section class="container-dark">
+<div class="container">
+    <h3 class="hsocial">Contact Me</h3>
+    <h3 class="intro subtitle">
+        <a href="https://www.linkedin.com/in/kelly-rice/" class="social-icon"><i class="fab fa-linkedin"></i></a>
+        <a href="https://github.com/krice19" class="social-icon"><i class="fab fa-github"></i></a>
+        <a href="mailto:<kb_rice@verizon.net>" class="social-icon"><i class="fas fa-envelope"></i></a>
+    </h3>
+</div>
+</section>
+
+<footer style="color: white;">
+<div class="container">
+    Kelly Rice &copy; 2023 | Columbia Engineering Bootcamps
+
+</div>
+</footer>
+
 {% endblock %}

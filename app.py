@@ -1,19 +1,8 @@
-''' Example of Spotify authorization code flow (refreshable user auth).
-
-Displays profile information of authenticated user and access token
-information that can be refreshed by clicking a button.
-
-Basic flow:
-    -> '/'
-    -> Spotify login page
-    -> '/callback'
-    -> get tokens
-    -> use tokens to access API
-
+''' 
 Required environment variables:
     FLASK_APP, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, SECRET_KEY
 
-More info:
+Auth Flow info at:
     https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow
 
 '''
@@ -30,6 +19,7 @@ from flask import (
     session,
     url_for,
 )
+
 import json
 import logging
 import os
@@ -61,14 +51,15 @@ SECRET_KEY = SECRET_KEY
 # Spotify API endpoints
 AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
-ME_URL = 'https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=long_term'
+ME_URL = 'https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=medium_term'
 AUDIO_URL = 'https://api.spotify.com/v1/audio-features?ids='
-ME2_URL = 'https://api.spotify.com/v1/me/top/tracks?limit=5&time_range=long_term'
+ME2_URL = 'https://api.spotify.com/v1/me/top/tracks?limit=5&time_range=medium_term'
 
 
 # Start 'er up
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
+
 
 
 
@@ -148,9 +139,12 @@ def callback():
     # `auth=(CLIENT_ID, SECRET)` basically wraps an 'Authorization'
     # header with value:
     # b'Basic ' + b64encode((CLIENT_ID + ':' + SECRET).encode())
+    
+    
+    
     res = requests.post(TOKEN_URL, auth=(CLIENT_ID, CLIENT_SECRET), data=payload)
 
-    
+
     # convert the response to JSON
     res_data = res.json()
 
@@ -172,176 +166,156 @@ def callback():
     }
 
     return redirect(url_for('me'))
-
-
-@app.route('/refresh')
-def refresh():
-    '''Refresh access token.'''
-
-    payload = {
-        'grant_type': 'refresh_token',
-        'refresh_token': session.get('tokens').get('refresh_token'),
-    }
-    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-
-    res = requests.post(
-        TOKEN_URL, auth=(CLIENT_ID, CLIENT_SECRET), data=payload, headers=headers
-    )
-    res_data = res.json()
-
-    # Load new token into session
-    session['tokens']['access_token'] = res_data.get('access_token')
-
-    return json.dumps(session['tokens'])
-
+    
 
 @app.route('/me')
 def me():
     '''Get profile info as a API example.'''
 
-    # Check for tokens
-    if 'tokens' not in session:
-        app.logger.error('No tokens in session.')
-        abort(400)
-
-    # Get profile info
-    headers = {'Authorization': f"Bearer {session['tokens'].get('access_token')}"}
-
-    #headers = {'Authorization': 'Bearer {token}'.format(token=access_token)
-               
-
-
     try:
-        
-        res = requests.get(ME_URL, headers=headers)
-        app.logger.info(f"Status Code {res.status_code}")
-        app.logger.info(f"Status Code {res.headers}")
-        app.logger.info(f"Status Code {res.text}")
-        top_tracks = res.json()
-    
 
-        if res.status_code != 200:
-            app.logger.error(
-                'Failed to get profile info: %s',
-                top_tracks.get('error', 'No error message returned.'),
-            )
-            abort(res.status_code)
-        
-        output_dict = [x for x in top_tracks["items"] if x['artists'][0]['name'] == 'Taylor Swift' and x['album']['album_type'] == 'ALBUM']
 
-        result = output_dict[0]["album"]['name']
+        # Get profile info
+        headers = {'Authorization': f"Bearer {session['tokens'].get('access_token')}"}
 
-        song_name = output_dict[0]['name']
+                
+
+
+        try:
+            
+            res = requests.get(ME_URL, headers=headers)
+            app.logger.info(f"Status Code {res.status_code}")
+            app.logger.info(f"Status Code {res.headers}")
+            app.logger.info(f"Status Code {res.text}")
+            top_tracks = res.json()
         
 
+            if res.status_code != 200:
+                app.logger.error(
+                    'Failed to get profile info: %s',
+                    top_tracks.get('error', 'No error message returned.'),
+                )
+                abort(res.status_code)
+            
+            output_dict = [x for x in top_tracks["items"] if x['artists'][0]['name'] == 'Taylor Swift' and x['album']['album_type'] == 'ALBUM']
+
+            result = output_dict[0]["album"]['name']
+
+            song_name = output_dict[0]['name']
+            
+
+        
+        except:
+        
+            res = requests.get(ME2_URL, headers=headers)
+
+            app.logger.info(f"Status Code {res.status_code}")
+            app.logger.info(f"Status Code {res.headers}")
+            app.logger.info(f"Status Code {res.text}")
+            
+            top_tracks = res.json()
+
+
+            df = pd.read_csv("static/all_taylor_features.csv")
+            df = df.drop('Unnamed: 0',axis=1)
+            df["album_outcome"] = label_encoder.fit_transform(df["album"])
+        
+            y = df["album_outcome"]
+            x = df.drop(columns=["album","album_outcome"])
+        
+            classifier.fit(x, y)
+
+
+            top_songs =[]
+            for idx, item in enumerate(top_tracks['items']):
+                top_songs.append(item['id'])
+        
+            song_count = len(top_songs)
+
+            id_string = ','.join(top_songs)
+
+            url = AUDIO_URL+id_string
+
+            res2 = requests.get(url, headers=headers)
+            audio_features = res2.json()
+
+
+            dance = []
+            energy = []
+            key = []
+            loud = []
+            mode = []
+            speech = []
+            acoustic = []
+            instrument = []
+            liveness = []
+            valence = []
+            tempo = []
+
+            for idx, item in enumerate(audio_features['audio_features']):
+                dance.append(item["danceability"])
+                energy.append(item["energy"])
+                key.append(item["key"])
+                loud.append(item["loudness"])
+                mode.append(item["mode"])
+                speech.append(item["speechiness"])
+                acoustic.append(item["acousticness"])
+                instrument.append(item["instrumentalness"])
+                liveness.append(item["liveness"])
+                valence.append(item["valence"])
+                tempo.append(item["tempo"])
+                    
+            song_dict = dict(danceability=dance, 
+                        energy =energy,
+                        key =key,
+                        loudness=loud,
+                        mode=mode,
+                        speechiness=speech,
+                        acousticness=acoustic,
+                        instrumentalness=instrument,
+                        liveness=liveness,
+                        valence=valence,
+                        tempo=tempo)
+            
+            song_df = pd.DataFrame(song_dict)
+        
+            x_test = song_df
+            y_pred = classifier.predict(x_test)
+            album_pred = label_encoder.inverse_transform(y_pred)
+            
+            result = album_pred[0]
+        
+
+
+        
+
+        if result == 'Midnights (The Til Dawn Edition)' or result == 'Midnights (3am Edition)' or result =='Midnights':
+            era_name = "Midnights"
+        elif result == "Red (Taylor's Version)" or result == 'Red' or result == "Red (Deluxe Edition)":
+            era_name = "Red"
+        elif result == "Fearless (Taylor's Version)" or result == 'Fearless' or result == "Fearless Platinum Edition":
+            era_name = "Fearless"
+        elif result == "evermore (deluxe version)" or result == 'evermore':
+            era_name = "evermore"
+        elif result == "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]" or result == 'folklore (deluxe version)' or result == "folklore":
+            era_name = "folklore"
+        elif result == "Lover":
+            era_name = "Lover"
+        elif result == "reputation" or result == 'reputation Stadium Tour Surprise Song Playlist':
+            era_name = "reputation"
+        elif result == "1989 (Taylor's Version)" or result == '1989' or result == "1989 (Deluxe Edition)":
+            era_name = "1989"
+        elif result == "Speak Now (Taylor's Version)" or result == "Speak Now" or result == "Speak Now (Deluxe Edition)" or result == "Speak Now World Tour Live":
+            era_name = "Speak Now"
+        elif result == "Taylor Swift" or result == 'Live From Clear Channel Stripped 2008':
+            era_name = "Taylor Swift Debut"
+        else:
+            era_name = "UH OH, you need to listen to more Taylor Swift"
+
+        
+        return render_template('me.html', result=era_name, tokens=session.get('tokens'))
     
     except:
-      
-        res = requests.get(ME2_URL, headers=headers)
 
-        app.logger.info(f"Status Code {res.status_code}")
-        app.logger.info(f"Status Code {res.headers}")
-        app.logger.info(f"Status Code {res.text}")
-        
-        top_tracks = res.json()
-
-
-        df = pd.read_csv("all_taylor_features.csv")
-        df = df.drop('Unnamed: 0',axis=1)
-        df["album_outcome"] = label_encoder.fit_transform(df["album"])
-    
-        y = df["album_outcome"]
-        x = df.drop(columns=["album","album_outcome"])
-    
-        classifier.fit(x, y)
-
-
-        top_songs =[]
-        for idx, item in enumerate(top_tracks['items']):
-            top_songs.append(item['id'])
-    
-        song_count = len(top_songs)
-
-        id_string = ','.join(top_songs)
-
-        url = AUDIO_URL+id_string
-
-        res2 = requests.get(url, headers=headers)
-        audio_features = res2.json()
-
-
-        dance = []
-        energy = []
-        key = []
-        loud = []
-        mode = []
-        speech = []
-        acoustic = []
-        instrument = []
-        liveness = []
-        valence = []
-        tempo = []
-
-        for idx, item in enumerate(audio_features['audio_features']):
-            dance.append(item["danceability"])
-            energy.append(item["energy"])
-            key.append(item["key"])
-            loud.append(item["loudness"])
-            mode.append(item["mode"])
-            speech.append(item["speechiness"])
-            acoustic.append(item["acousticness"])
-            instrument.append(item["instrumentalness"])
-            liveness.append(item["liveness"])
-            valence.append(item["valence"])
-            tempo.append(item["tempo"])
-                
-        song_dict = dict(danceability=dance, 
-                    energy =energy,
-                    key =key,
-                    loudness=loud,
-                    mode=mode,
-                    speechiness=speech,
-                    acousticness=acoustic,
-                    instrumentalness=instrument,
-                    liveness=liveness,
-                    valence=valence,
-                    tempo=tempo)
-        
-        song_df = pd.DataFrame(song_dict)
-    
-        x_test = song_df
-        y_pred = classifier.predict(x_test)
-        album_pred = label_encoder.inverse_transform(y_pred)
-        
-        result = album_pred[0]
-    
-
-
-    
-
-    if result == 'Midnights (The Til Dawn Edition)' or result == 'Midnights (3am Edition)' or result =='Midnights':
-        era_name = "Midnights"
-    elif result == "Red (Taylor's Version)" or result == 'Red' or result == "Red (Deluxe Edition)":
-        era_name = "Red"
-    elif result == "Fearless (Taylor's Version)" or result == 'Fearless' or result == "Fearless Platinum Edition":
-        era_name = "Fearless"
-    elif result == "evermore (deluxe version)" or result == 'evermore':
-        era_name = "evermore"
-    elif result == "folklore: the long pond studio sessions (from the Disney+ special) [deluxe edition]" or result == 'folklore (deluxe version)' or result == "folklore":
-        era_name = "folklore"
-    elif result == "Lover":
-        era_name = "Lover"
-    elif result == "reputation" or result == 'reputation Stadium Tour Surprise Song Playlist':
-        era_name = "reputation"
-    elif result == "1989 (Taylor's Version)" or result == '1989' or result == "1989 (Deluxe Edition)":
-        era_name = "1989"
-    elif result == "Speak Now (Taylor's Version)" or result == "Speak Now" or result == "Speak Now (Deluxe Edition)" or result == "Speak Now World Tour Live":
-        era_name = "Speak Now"
-    elif result == "Taylor Swift" or result == 'Live From Clear Channel Stripped 2008':
-        era_name = "Taylor Swift Debut"
-    else:
-        era_name = "UH OH, you need to listen to more Taylor Swift"
-
-    
-    return render_template('me.html', result=era_name, tokens=session.get('tokens'))
+        return render_template('error.html')
 

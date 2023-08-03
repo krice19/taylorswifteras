@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0", shrink-to-fit="yes" />
+   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+   <title>What Taylor Swift Era are you?</title>
+   <link
+     rel="stylesheet"
+     href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="static/style.css" />
+
+    <style> 
+        body {
+            background-color: black;
+            background-size:cover
+        }
+        .responsive {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>  
+    <div style="text-align: center;"> 
+        <img
+                src="{{ url_for('static', filename='errortemp.png')}}"
+                class="responsive"
+                alt="UHOH" 
+        />
+    </div>
+
+    <div style="text-align: center;">
+        <p><a class="btn btn-outline-danger" href="/logout"
+            role="button" >Logout</a></p>
+    </div>
+
+
+</body>
+</html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
    <meta charset="UTF-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1.0", shrink-to-fit="yes" />
@@ -11,49 +12,38 @@
     />
     <link rel="stylesheet" href="static/style.css" />
 
-   <style> 
+   <style>
     body {
-      background-image: url("https://www.gannett-cdn.com/indepth-static-assets/uploads/master/11510779002/910b9cf6-bcea-4fd0-9ba1-fc10cff1fb04-taylor-swift-eras-topper-2.png?width=2400");
+      background-image: url("https://www.inquirer.com/resizer/O-X-uF_1gEScJoCU472G3GcDNMk=/filters:format(webp)/cloudfront-us-east-1.images.arcpublishing.com/pmn/LLDZCWORHJDVJMM5I6GSKKCYSI.jpg");
       background-color: #cccccc;
+      background-size:cover
     }
-    .vertical-center {
-    text-align: center;
-    display: inline-block;
-    border-style: solid;
-    border-radius: 10px;
-    transition: all .1s linear;
-    line-height: 1.25;
-    cursor: pointer;
-    background-color: black;
-    color: white;
-    width: 150px;
-                    }
+
     .h1 {
         font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     }
-
-                    
     </style>
 </head>
 
 
-<body>  
+<body>
 
-    <div class="wrapper">
+    <div class="wrapper" style= 'text-align:center'>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-6"> 
-                    <h1 style="color:white"> What Taylor Swift Era Are You?</h1>
+                <div class="col-md-6">
+                    <img
+                          src="{{ url_for('static', filename='title.png') }}"
+                          class="image"
+                          alt="title"
+                          style="max-width:100%;height:auto;"
+                        />
+                    <p><a class="btn btn-success btn-lg" href="/login"
+                  role="button" >Login with Spotify</a></p>
                 </div>
             </div>
         </div>
-        <div class="container-fluid">
-            <div class="vertical-center"> 
-                <p><a class="btn btn-primary btn-lg" href="/login"
-                  role="button">Login</a></p>
-            </div> 
-        </div>
-               
+
     </div>
 
 </body>
